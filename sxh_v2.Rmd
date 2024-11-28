@@ -1,0 +1,2183 @@
+---
+title: "Kết quả SXH"
+output:
+  word_document: default
+  html_document: default
+echo: false
+warning: false
+message: false
+---
+
+```{r setup, include=FALSE}
+library(flextable)
+library(officer)
+library(ggplot2)
+library(ggrepel)
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Đợt dịch năm 2019
+
+## Thành phố 
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_tp_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r, dpi=500}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Outbreak 2019") +
+  scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("Unqualified", "High sens",
+                                "High spec", "Both high")) +
+  scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 1
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q1_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q1 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D1") +
+  scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+  scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 3
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q3_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q3 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D3") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 4
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q4_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q4 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D4") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 5
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q5_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q5 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D5") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 6
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q6_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q6 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D6") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 7
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q7_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q7 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D7") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 8
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q8_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q8 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D8") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 10
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q10_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q10 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D10") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 11
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q11_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q11 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D11") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 12
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_q12_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q12 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D12") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Gò Vấp
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_gv_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+gv <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Go Vap D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Tân Bình
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_tb_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tb <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Tan Binh D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Bình Thạnh
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_bt_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+bt <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Binh Thanh D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Phú Nhuận
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_pn_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+pn <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Phu Nhuan D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Củ Chi
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_cc_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+cc <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Cu Chi SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Hóc Môn
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_hm_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+hm <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Hoc Mon D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Bình Chánh
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_bc_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+bc <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Binh Chanh SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Nhà Bè
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_nb_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+nb <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Nha Be SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Thủ Đức
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_tptd_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tptd <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Thu Duc City") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Cần Giờ
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_cg_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+cg <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Can Gio SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Tân Phú
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_tphu_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tphu <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Tan Phu D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Bình Tân
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2019/tbl_bta_sxh_2019.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+bta <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Binh Tan D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+```{r, fig.width=14, fig.height=14, dpi=500}
+library(patchwork)
+
+wrap_plots(list(q1, q3, q4 , q5), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(q6, q7, q8 , q10), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(q11, q12, gv , tb), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(bt, pn, cc , hm), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(bc, nb, tptd, cg), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+```
+
+```{r, fig.width=14, fig.height=7, dpi=500}
+wrap_plots(list(tphu, bta), ncol = 2, nrow = 1) + 
+  theme(legend.position = "bottom")
+```
+
+# Đợt dịch năm 2022
+
+## Thành phố 
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_tp_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r, dpi=500}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Outbreak 2022") +
+  scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("Unqualified", "High sens",
+                                "High spec", "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 1
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q1_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q1 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D1") +
+  scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 3
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q3_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q3 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D3") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 4
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q4_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q4 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D4") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 5
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q5_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q5 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D5") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 6
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q6_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q6 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D6") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 7
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q7_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q7 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D7") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 8
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q8_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q8 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D8") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 10
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q10_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q10 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D10") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 11
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q11_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q11 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D11") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Quận 12
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_q12_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+q12 <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "D12") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Gò Vấp
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_gv_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+gv <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Go Vap D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Tân Bình
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_tb_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tb <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Tan Binh D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Bình Thạnh
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_bt_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+bt <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Binh Thanh D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Phú Nhuận
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_pn_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+pn <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Phu Nhuan D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Củ Chi
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_cc_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+cc <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Cu Chi SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Hóc Môn
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_hm_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+hm <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Hoc Mon D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Bình Chánh
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_bc_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+bc <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Binh Chanh SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Nhà Bè
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_nb_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+nb <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Nha Be SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Thủ Đức
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_tptd_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tptd <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Thu Duc City") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Cần Giờ
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_cg_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+cg <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Can Gio SD") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Tân Phú
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_tphu_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+tphu <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Tan Phu D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+## Bình Tân
+
+```{r}
+tbl <- readRDS("Data/obs_sxh_2022/tbl_bta_sxh_2022.rds")
+
+tbl <- tbl %>%
+  mutate(cat = case_when(
+    sens >= 0.8 & spec >= 0.5 & spec < 0.8 ~ 1,
+    spec >= 0.8 & sens >= 0.5 & sens < 0.8 ~ 2,
+    sens >= 0.8 & spec >= 0.8 ~ 3,
+    TRUE ~ 0
+  ))
+
+tbl$cat <- as.factor(tbl$cat)
+tbl <- tbl %>%
+  mutate(across(where(is.numeric), ~ sprintf("%.3f", .)))
+my_table <- flextable(tbl)
+
+my_table <- theme_vanilla(my_table)
+my_table <- autofit(my_table)
+my_table
+```
+
+```{r}
+tbl$sens <- as.numeric(tbl$sens)
+tbl$fpr <- as.numeric(tbl$fpr)
+bta <- ggplot(tbl, aes(x = fpr, y = sens)) +
+  geom_point(aes(color = cat), size = 3) +
+  geom_text_repel(aes(label = method), vjust = -0.5, max.overlaps = Inf) +
+  labs(x = "False Positive Rate",
+       y = "Sensitivity",
+       color = NULL,
+       title = "Binh Tan D") +
+    scale_color_manual(values = c("0" = "lightgrey", "1" = "blue",
+                                "2" = "green", "3" = "red"),
+                     labels = c("0" = "Unqualified", 
+                                "1" ="High sens",
+                                "2" = "High spec", 
+                                "3" = "Both high")) +
+    scale_x_continuous(breaks = seq(0,1,0.2)) +
+  scale_y_continuous(breaks = seq(0,1,0.2)) +
+  theme_classic() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold")) 
+```
+
+```{r, fig.width=14, fig.height=14, dpi=500}
+library(patchwork)
+
+wrap_plots(list(q1, q3, q4 , q5), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(q6, q7, q8 , q10), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(q11, q12, gv , tb), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(bt, pn, cc , hm), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+
+wrap_plots(list(bc, nb, tptd , cg), ncol = 2, nrow = 2) + 
+  theme(legend.position = "bottom")
+```
+
+```{r, fig.width=14, fig.height=7, dpi=500}
+wrap_plots(list(tphu, bta), ncol = 2, nrow = 1) + 
+  theme(legend.position = "bottom")
+```
